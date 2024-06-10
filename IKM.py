@@ -122,6 +122,7 @@ def main(): # Основная функция
                 quanity = int(input('Введите целое, неотрицательное число больше нуля, равное количеству тюков у одного купца, у другого будет столько же: '))
             except(ValueError, TypeError):
                 condition = False
+                quanity = None
             else:
                 if quanity == 0:
                     condition = False
@@ -135,6 +136,7 @@ def main(): # Основная функция
                 month = int(input('Введите целое число от 1 до 12, чей номер соответствует месяцу М в григорианском календаре: '))
             except(ValueError, TypeError):
                 condition = False
+                month = None
             else:
                 if month < 1 or month > 12:
                     condition = False
@@ -148,6 +150,7 @@ def main(): # Основная функция
                 day = int(input('Введите текущий день месяца М. Учтите, что в 1, 3, 5, 7, 8, 10 и 12 месяцах - 31 день. В 4, 6, 9, 11 - 30. В 2 месяце в зависимости от года - 28 или 29: '))
             except(ValueError, TypeError):
                 condition = False
+                day = None
             else:
                 if month in [1, 3, 5, 7, 8, 10, 12]:
                     if day < 1 or day > 31:
@@ -186,6 +189,7 @@ def main(): # Основная функция
                 indentation_value = int(input('Введите целое, неотрицательное К, больше 0 - кол-во тюков, которые будут пропущены, прежде чем следующий будет выкинут за борт: '))
             except(ValueError, TypeError):
                 condition = False
+                indentation_value = None
             else:
                 if indentation_value < 0:
                     condition = False
