@@ -124,8 +124,9 @@ def main(): # Основная функция
                 condition = False
                 quanity = None
             else:
-                if quanity == 0:
+                if quanity <= 0:
                     condition = False
+                    quanity = None
                 else:
                     condition = True
             print('\n')
@@ -140,44 +141,52 @@ def main(): # Основная функция
             else:
                 if month < 1 or month > 12:
                     condition = False
+                    month = None
                 else:
                     condition = True
             print('\n')
             return month, condition
 
-        def current_day(month): # Функция выбора дня
+        def current_day(month, quanity): # Функция выбора дня
             try:
-                day = int(input('Введите текущий день месяца М. Учтите, что в 1, 3, 5, 7, 8, 10 и 12 месяцах - 31 день. В 4, 6, 9, 11 - 30. В 2 месяце в зависимости от года - 28 или 29: '))
+                day = int(input('Введите текущий день месяца М. Учтите, что в 1, 3, 5, 7, 8, 10 и 12 месяцах - 31 день. В 4, 6, 9, 11 - 30. В 2 месяце в зависимости от года - 28 или 29. Также, номер не должен быть больше, чем кол-во тюков у купцов: '))
             except(ValueError, TypeError):
                 condition = False
                 day = None
             else:
-                if month in [1, 3, 5, 7, 8, 10, 12]:
-                    if day < 1 or day > 31:
+                if quanity is not None:
+                    if day >= quanity*2:
                         condition = False
+                        day = None
                     else:
-                        condition = True
-                elif month in [4, 6, 9, 11]:
-                    if day < 1 or day > 30:
-                        condition = False
-                    else:
-                        condition = True
-                elif month == 2:
-                    try:
-                        leap_year = int(input('Вы выбрали 2 месяц - это февраль. В зависимости от того, является год висикосным или нет, зависит кол-во дней в месяце. Введите 1 если год високосный, если нет введите 0: '))
-                    except(ValueError, TypeError):
-                        condition = False
-                    else:
-                        if leap_year == 1:
-                            if day < 1 or day > 29:
+                        if month in [1, 3, 5, 7, 8, 10, 12]:
+                            if day < 1 or day > 31:
                                 condition = False
                             else:
                                 condition = True
-                        elif leap_year == 0: # Выбор года - високосный или нет
-                            if day < 1 or day > 28:
+                        elif month in [4, 6, 9, 11]:
+                            if day < 1 or day > 30:
                                 condition = False
                             else:
                                 condition = True
+                        elif month == 2:
+                            try:
+                                leap_year = int(input('Вы выбрали 2 месяц - это февраль. В зависимости от того, является год висикосным или нет, зависит кол-во дней в месяце. Введите 1 если год високосный, если нет введите 0: '))
+                            except(ValueError, TypeError):
+                                condition = False
+                            else:
+                                if leap_year == 1:
+                                    if day < 1 or day > 29:
+                                        condition = False
+                                    else:
+                                        condition = True
+                                elif leap_year == 0: # Выбор года - високосный или нет
+                                    if day < 1 or day > 28:
+                                        condition = False
+                                    else:
+                                        condition = True
+                                else:
+                                    condition = False
                         else:
                             condition = False
                 else:
@@ -194,21 +203,26 @@ def main(): # Основная функция
                 if indentation_value < 0:
                     condition = False
                 else:
-                    if indentation_value >= quanity*2:
-                        indentation_value = indentation_value % day # Если промежуток больше, чем кол-во тюков, то нужно брать остаток от деления такого промежутка на кол-во тюков
-                    condition = True
+                    if quanity is not None:
+                        if indentation_value >= quanity*2:
+                            indentation_value = indentation_value % (quanity*2) # Если промежуток больше, чем кол-во тюков, то нужно брать остаток от деления такого промежутка на кол-во тюков
+                        condition = True
+                    else:
+                        condition = False
+                        indentation_value = None
             return indentation_value, condition
 
         RuleData = RuleData_List()
 
         quanity, quanity_condition = quanity_cargo_box()
         month, month_condition = current_month()
-        day, day_condition = current_day(month)
+        day, day_condition = current_day(month, quanity)
         indentation_value, indentation_condition = indentation(quanity)
         print('\n','\n',
             '---------------------------------------------------------------- * ------------------------------------------------------------------',
             '\n','\n',)
 
+        print(quanity, day, month, indentation_value)
         if quanity_condition is True and month_condition is True and day_condition is True and indentation_condition is True:
             RuleData.quanity = quanity
             RuleData.month = month
@@ -232,6 +246,7 @@ def main(): # Основная функция
     
     status = input_data()
     if status is not None:
+        print(status.quanity, status.day, status.month, status.indentation)
         CargoList = LinkedList()
         LinkedList.adding_cargo_box(CargoList, status)
         LinkedList.removing_cargo_box(CargoList, status)
